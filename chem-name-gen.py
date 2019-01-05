@@ -24,8 +24,10 @@ import random
 # Chemistry dictionary file is from DOI: 10.1021/ed2002994;  converted
 # to plain ascii file by the following command:
 # iconv -c -f utf-16 -t ascii chemistry.dic > chemistry2.dic
+# Also, all terms with 4 characters or less were removed by
+# sed -r '/^.{,4}$/d' chemistry2.dic > chemistry3.dic
 chemistry_words = []
-with open("chemistry2.dic", "r") as f:
+with open("chemistry3.dic", "r") as f:
 	chemistry_words = f.readlines()
 
 # Dictionary class
