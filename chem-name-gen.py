@@ -30,6 +30,8 @@ chemistry_words = []
 with open("chemistry3.dic", "r") as f:
 	chemistry_words = f.readlines()
 
+random.shuffle(chemistry_words)
+
 # Dictionary class
 class Mdict:
     def __init__(self):
