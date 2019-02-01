@@ -76,7 +76,7 @@ class MName:
     """
     A name from a Markov chain
     """
-    def __init__(self, chainlen = 2):
+    def __init__(self, chainlen = 3):
         """
         Building the dictionary
         """
@@ -105,7 +105,7 @@ class MName:
         suffix = ""
         while True:
             suffix = self.mcd.get_suffix(prefix)
-            if suffix == "\n" or len(name) > 9:
+            if suffix == "\n" or len(name) > 29:
                 break
             else:
                 name = name + suffix
