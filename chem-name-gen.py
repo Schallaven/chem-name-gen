@@ -32,6 +32,27 @@ with open("chemistry3.dic", "r") as f:
 
 random.shuffle(chemistry_words)
 
+# FOLDOC dictionary from http://foldoc.org/source.html; converted
+# to a plain list by the following commands:
+# cat foldoc.dic | grep -Pv '^\t' | grep -v '^$' > foldoc2.dic
+# Also, all terms with 4 characters or less were removed by
+# sed -r '/^.{,4}$/d' foldoc2.dic > foldoc3.dic
+# Some lines at the beginning and the end were removed manually
+foldoc_words = []
+with open("foldoc3.dic", "r") as f:
+	foldoc_words = f.readlines()
+
+random.shuffle(foldoc_words)
+
+print(len(chemistry_words), len(foldoc_words))
+
+# There are way more  chemistry words than foldoc words.  Therefore,
+# we shorten the chemistry_words list to the same length and combine
+# both then.
+chemistry_words = chemistry_words[:len(foldoc_words)] + foldoc_words
+random.shuffle(chemistry_words)
+
+
 # Dictionary class
 class Mdict:
     def __init__(self):
