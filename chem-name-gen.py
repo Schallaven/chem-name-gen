@@ -107,12 +107,10 @@ class MName:
             sys.exit(0)
     
         self.mcd = Mdict()
-        oldnames = []
         self.chainlen = chainlen
     
         for l in chemistry_words:
             l = l.strip()
-            oldnames.append(l)
             s = " " * chainlen + l
             for n in range(0,len(l)):
                 self.mcd.add_key(s[n:n+chainlen], s[n+chainlen])
