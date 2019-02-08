@@ -20,6 +20,27 @@
 # http://www.roguebasin.com/index.php?title=Markov_chains_name_generator_in_Python
 
 import random
+import argparse
+
+# Argument setup and parsing to a dictionary
+parser = argparse.ArgumentParser(
+			description = 'A Markov name generator with a chemistry dictionary '
+						  'to generate names for new projects related to chemistry.',
+				 epilog = 'A name for a new project is always one of the hardest parts.')
+
+parser.add_argument('-v', '--version', help = 'prints version information', action='version', version='chem-name-gen 1.0 by Sven Kochmann')
+
+parser.add_argument('-n', '--names', metavar = 'N', help = 'number of names to generate (default: 10)', type = int, default = 10)
+parser.add_argument('-c', '--chain', metavar = 'N', help = 'chain length (default: 3)', type = int, default = 3)
+parser.add_argument('-l', '--length', metavar = 'N', help = 'max length of generated name (default: 30)', type = int, default = 30)
+parser.add_argument('-f', metavar = 'F', help = 'cut down the word list from the chemistry dictionary to F times of the word list'
+												' of the FOLDOC dictionary; this will allow to over- or under-emphasize the'
+												' chemistry part of the generated words (default: 1.0 = balanced)', type = float, default = 1.0)
+
+parser.add_argument('--no_cut', help = 'do not cut down the word list from the chemistry', action = 'store_false', dest = 'cutdown') 
+parser.add_argument('--remove_spaces', '-r', help = 'removes spaces from generated words', action = 'store_true')
+
+args = vars(parser.parse_args())
 
 # Chemistry dictionary file is from DOI: 10.1021/ed2002994;  converted
 # to plain ascii file by the following command:
@@ -44,12 +65,13 @@ with open("foldoc3.dic", "r") as f:
 
 random.shuffle(foldoc_words)
 
-print(len(chemistry_words), len(foldoc_words))
-
 # There are way more  chemistry words than foldoc words.  Therefore,
 # we shorten the chemistry_words list to the same length and combine
 # both then.
-chemistry_words = chemistry_words[:len(foldoc_words)] + foldoc_words
+if args['cutdown']:
+	chemistry_words = chemistry_words[:int(len(foldoc_words)*args['f'])] 
+
+chemistry_words = chemistry_words + foldoc_words
 random.shuffle(chemistry_words)
 
 
@@ -96,7 +118,7 @@ class MName:
                 self.mcd.add_key(s[n:n+chainlen], s[n+chainlen])
             self.mcd.add_key(s[len(l):len(l)+chainlen], "\n")
     
-    def New(self):
+    def New(self, wordslen = 30):
         """
         New name from the Markov chain
         """
@@ -105,7 +127,7 @@ class MName:
         suffix = ""
         while True:
             suffix = self.mcd.get_suffix(prefix)
-            if suffix == "\n" or len(name) > 29:
+            if suffix == "\n" or len(name) > (wordslen-1):
                 break
             else:
                 name = name + suffix
@@ -113,5 +135,12 @@ class MName:
         return name.capitalize()  
 
 # Let's just print 10 generated names
-for i in range(10):
-    print(MName().New())
+for i in range(args['names']):
+	word = MName(chainlen = args['chain']).New(wordslen = args['length'])
+
+	if args['remove_spaces']:
+		word = word.replace(' ', '') 
+
+	print(word)
+
+
