@@ -26,8 +26,8 @@ Methylethylene
 There are some command line parameters available now to tailor the output a little bit:
 ```bash
 $ ./chem-name-gen -h
-usage: chem-name-gen.py [-h] [-v] [-n N] [-c N] [-l N] [-f F] [--no_cut]
-                        [--remove_spaces]
+usage: chem-name-gen.py [-h] [-v] [-n N] [-c N] [-l N] [-f F] [-a AB]
+                        [--no_cut] [--remove_spaces]
 
 A Markov name generator with a chemistry dictionary to generate names for new
 projects related to chemistry.
@@ -42,6 +42,7 @@ optional arguments:
                        F times of the word list of the FOLDOC dictionary; this
                        will allow to over- or under-emphasize the chemistry
                        part of the generated words (default: 1.0 = balanced)
+  -a AB, --acronym AB  generate names to fit the given acronym
   --no_cut             do not cut down the word list from the chemistry
   --remove_spaces, -r  removes spaces from generated words
 
