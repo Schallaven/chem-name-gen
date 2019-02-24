@@ -46,9 +46,9 @@ args = vars(parser.parse_args())
 # to plain ascii file by the following command:
 # iconv -c -f utf-16 -t ascii chemistry.dic > chemistry2.dic
 # Also, all terms with 4 characters or less were removed by
-# sed -r '/^.{,4}$/d' chemistry2.dic > chemistry3.dic
+# sed -r '/^.{,4}$/d' chemistry2.dic > chemistry_words.dic
 chemistry_words = []
-with open("chemistry3.dic", "r") as f:
+with open("chemistry_words.dic", "r") as f:
 	chemistry_words = f.readlines()
 
 random.shuffle(chemistry_words)
@@ -57,10 +57,10 @@ random.shuffle(chemistry_words)
 # to a plain list by the following commands:
 # cat foldoc.dic | grep -Pv '^\t' | grep -v '^$' > foldoc2.dic
 # Also, all terms with 4 characters or less were removed by
-# sed -r '/^.{,4}$/d' foldoc2.dic > foldoc3.dic
+# sed -r '/^.{,4}$/d' foldoc2.dic > foldoc_words.dic
 # Some lines at the beginning and the end were removed manually
 foldoc_words = []
-with open("foldoc3.dic", "r") as f:
+with open("foldoc_words.dic", "r") as f:
 	foldoc_words = f.readlines()
 
 random.shuffle(foldoc_words)
