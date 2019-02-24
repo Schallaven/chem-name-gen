@@ -36,6 +36,7 @@ parser.add_argument('-l', '--length', metavar = 'N', help = 'max length of gener
 parser.add_argument('-f', metavar = 'F', help = 'cut down the word list from the chemistry dictionary to F times of the word list'
 												' of the FOLDOC dictionary; this will allow to over- or under-emphasize the'
 												' chemistry part of the generated words (default: 1.0 = balanced)', type = float, default = 1.0)
+parser.add_argument('-a', '--acronym', metavar = 'AB', help = 'generate names to fit the given acronym', type = str, default = '')
 
 parser.add_argument('--no_cut', help = 'do not cut down the word list from the chemistry', action = 'store_false', dest = 'cutdown') 
 parser.add_argument('--remove_spaces', '-r', help = 'removes spaces from generated words', action = 'store_true')
@@ -116,28 +117,44 @@ class MName:
                 self.mcd.add_key(s[n:n+chainlen], s[n+chainlen])
             self.mcd.add_key(s[len(l):len(l)+chainlen], "\n")
     
-    def New(self, wordslen = 30):
+    def New(self, wordslen = 30, startwith = ''):
         """
         New name from the Markov chain
-        """
-        prefix = " " * self.chainlen
-        name = ""
+        """        
+        prefix = " " * (self.chainlen - len(startwith)) + startwith
+        name = startwith
         suffix = ""
-        while True:
+        while True:			
             suffix = self.mcd.get_suffix(prefix)
+            #print("|" + name + "|", "|" + prefix + "|", "|" + suffix + "|")
             if suffix == "\n" or len(name) > (wordslen-1):
                 break
             else:
                 name = name + suffix
                 prefix = prefix[1:] + suffix
+                
+
         return name.capitalize()  
 
-# Let's just print 10 generated names
+# Let's print n generated names
 for i in range(args['names']):
-	word = MName(chainlen = args['chain']).New(wordslen = args['length'])
+	# For acronyms we generate a whole word for _each_ letter
+	if len(args['acronym']) > 0:
+		words = []
+		for letter in args['acronym']:
+			subword = MName(chainlen = args['chain']).New(wordslen = args['length'], startwith = letter)
 
-	if args['remove_spaces']:
-		word = word.replace(' ', '') 
+			if args['remove_spaces']:
+				subword = subword.replace(' ', '') 
+
+			words.append(subword)
+
+		word = " ".join(words)
+	else:
+		word = MName(chainlen = args['chain']).New(wordslen = args['length'])
+
+		if args['remove_spaces']:
+			word = word.replace(' ', '') 
 
 	print(word)
 
