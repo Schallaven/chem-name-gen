@@ -1,5 +1,7 @@
 # chem-name-gen
 
+[![DOI](https://zenodo.org/badge/164249470.svg)](https://zenodo.org/badge/latestdoi/164249470)
+
 A Markov name generator with a chemistry dictionary to generate names for new projects related to chemistry. A name for a new project is always one of the hardest parts.
 
 Use it like
